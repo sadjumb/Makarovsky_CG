@@ -9,3 +9,4 @@ G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.Gener
 G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.csproj.CoreCompileInputs.cache
 G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
 G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
+G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.KernelSIze.resources

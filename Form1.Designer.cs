@@ -255,6 +255,7 @@
       this.createKernelForMathMorphologyToolStripMenuItem.Name = "createKernelForMathMorphologyToolStripMenuItem";
       this.createKernelForMathMorphologyToolStripMenuItem.Size = new System.Drawing.Size(318, 27);
       this.createKernelForMathMorphologyToolStripMenuItem.Text = "Create kernel for Math Morphology";
+      this.createKernelForMathMorphologyToolStripMenuItem.Click += new System.EventHandler(this.createKernelForMathMorphologyToolStripMenuItem_Click);
       // 
       // backgroundWorker1
       // 

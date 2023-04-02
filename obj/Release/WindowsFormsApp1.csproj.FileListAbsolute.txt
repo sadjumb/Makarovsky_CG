@@ -1,0 +1,12 @@
+G:\Job\ComputerGraphics\WindowsFormsApp1\bin\Release\WindowsFormsApp1.exe.config
+G:\Job\ComputerGraphics\WindowsFormsApp1\bin\Release\WindowsFormsApp1.exe
+G:\Job\ComputerGraphics\WindowsFormsApp1\bin\Release\WindowsFormsApp1.pdb
+G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Release\WindowsFormsApp1.csproj.AssemblyReference.cache
+G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Release\WindowsFormsApp1.csproj.SuggestedBindingRedirects.cache
+G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Release\WindowsFormsApp1.Form1.resources
+G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Release\WindowsFormsApp1.KernelSIze.resources
+G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Release\WindowsFormsApp1.Properties.Resources.resources
+G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Release\WindowsFormsApp1.csproj.GenerateResource.cache
+G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Release\WindowsFormsApp1.csproj.CoreCompileInputs.cache
+G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Release\WindowsFormsApp1.exe
+G:\Job\ComputerGraphics\WindowsFormsApp1\obj\Release\WindowsFormsApp1.pdb

@@ -291,6 +291,12 @@ namespace WindowsFormsApp1
                              { 1, 1, 1 },
                              { 0, 1, 0 } };
     }
+    public DilationFilter(int[,] mask, int MH, int MW) //: base(mask, MH, MW)
+    {
+      this.mask = mask;
+      this.MH = MH;
+      this.MW = MW;
+    }
     protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
     {
       Color max = Color.FromArgb(0, 0, 0);

@@ -15,6 +15,7 @@ namespace WindowsFormsApp1
   {
     private List<Bitmap> imageList = new List<Bitmap>();
     Bitmap image;
+    KernelSIze kernelForm;
     public Form1()
     {
       InitializeComponent();
@@ -157,7 +158,16 @@ namespace WindowsFormsApp1
 
     private void dilationToolStripMenuItem_Click(object sender, EventArgs e)
     {
-      Filters filter = new DilationFilter();
+      Filters filter;
+      if (kernelForm.n != 0)
+      {
+        filter = new DilationFilter(kernelForm.kernel, kernelForm.n, kernelForm.n);
+      }
+      else
+      {
+        filter = new DilationFilter();
+      }
+      //Filters filter = new DilationFilter();
       backgroundWorker1.RunWorkerAsync(filter);
     }
 
@@ -188,6 +198,12 @@ namespace WindowsFormsApp1
         pictureBox1.Image = image;
         pictureBox1.Refresh();
       } 
+    }
+
+    private void createKernelForMathMorphologyToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      kernelForm = new KernelSIze();
+      kernelForm.Show();
     }
   }
 }
