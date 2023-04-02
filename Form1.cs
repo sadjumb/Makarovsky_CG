@@ -13,6 +13,7 @@ namespace WindowsFormsApp1
 {
   public partial class Form1 : Form
   {
+    private List<Bitmap> imageList = new List<Bitmap>();
     Bitmap image;
     public Form1()
     {
@@ -27,6 +28,7 @@ namespace WindowsFormsApp1
       if (openFileDialog.ShowDialog() == DialogResult.OK)
       {
         image = new Bitmap(openFileDialog.FileName);
+        imageList.Add(image);
         pictureBox1.Image = image;
         pictureBox1.Refresh();
       }
@@ -42,7 +44,10 @@ namespace WindowsFormsApp1
     {
       Bitmap newImage = ((Filters)e.Argument).processImage(image, backgroundWorker1);
       if (backgroundWorker1.CancellationPending != true)
+      {
         image = newImage;
+        imageList.Add(image);
+      }
     }
 
     private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -149,6 +154,40 @@ namespace WindowsFormsApp1
       Filters filter = new OperatorSharraFilter();
       backgroundWorker1.RunWorkerAsync(filter);
     }
-  }
 
+    private void dilationToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      Filters filter = new DilationFilter();
+      backgroundWorker1.RunWorkerAsync(filter);
+    }
+
+    private void erosionToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      Filters filter = new ErosionFilter();
+      backgroundWorker1.RunWorkerAsync(filter);
+    }
+
+    private void gradientToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      Filters filter = new GradientFilter();
+      backgroundWorker1.RunWorkerAsync(filter);
+    }
+
+    private void medianToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      Filters filter = new MedianFilter();
+      backgroundWorker1.RunWorkerAsync(filter);
+    }
+
+    private void button2_Click(object sender, EventArgs e)
+    {
+      if (imageList.Count > 1)
+      {
+        image = imageList[imageList.Count - 2];
+        imageList.RemoveAt(imageList.Count - 1);
+        pictureBox1.Image = image;
+        pictureBox1.Refresh();
+      } 
+    }
+  }
 }

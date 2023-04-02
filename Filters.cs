@@ -10,7 +10,7 @@ namespace WindowsFormsApp1
 {
   abstract class Filters
   {
-    public Bitmap processImage(Bitmap sourceImage, BackgroundWorker worker)
+    virtual public Bitmap processImage(Bitmap sourceImage, BackgroundWorker worker)
     {
       Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
 
@@ -256,6 +256,171 @@ namespace WindowsFormsApp1
                                  {10,  0,   -10},
                                  { 3,  0,    -3}};
       kernelY = new float[3, 3] { { 3, 10, 3 }, { 0, 0, 0 }, { -3, -10, -3 } };
+    }
+  }
+
+
+  class MathMorph : Filters
+  {
+    public MathMorph(){}
+
+    public MathMorph(int[,] mask, int MH, int MW)
+    {
+      this.mask = mask;
+      this.MH = MH;
+      this.MW = MW;
+    }
+
+    protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+    {
+      throw new NotImplementedException();
+    }
+
+    protected int[,] mask = null;
+    protected int MH;
+    protected int MW;
+  }
+
+  class DilationFilter : MathMorph
+  {
+    public DilationFilter() 
+    {
+      MH = 3;
+      MW = 3;
+      mask = new int[3, 3] { { 0, 1, 0 },
+                             { 1, 1, 1 },
+                             { 0, 1, 0 } };
+    }
+    protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+    {
+      Color max = Color.FromArgb(0, 0, 0);
+      for (int j = -MH / 2; j <= MH / 2; ++j)
+      {
+        for (int i = -MW / 2; i <= MW / 2; ++i)
+        {
+          Color sourceColor = sourceImage.GetPixel(Clamp(x + i, 0, sourceImage.Width - 1), Clamp(y + j, 0, sourceImage.Height - 1));
+          if (mask[i + MW / 2, j + MH / 2] == 1 && sourceColor.R > max.R)
+          {
+            max = sourceColor;
+          }
+        }
+      }
+      return max;
+    }
+  }
+  class ErosionFilter : MathMorph
+  {
+    public ErosionFilter()
+    {
+      MH = 3;
+      MW = 3;
+      mask = new int[3, 3] { { 0, 1, 0 },
+                             { 1, 1, 1 },
+                             { 0, 1, 0 } };
+    }
+    protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+    {
+      Color min = Color.FromArgb(255, 255, 255);
+      for (int j = -MH / 2; j <= MH / 2; ++j)
+      {
+        for (int i = -MW / 2; i <= MW / 2; ++i)
+        {
+          Color sourceColor = sourceImage.GetPixel(Clamp(x + i, 0, sourceImage.Width - 1), Clamp(y + j, 0, sourceImage.Height - 1));
+          if (mask[i + MW / 2, j + MH / 2] == 1 && sourceColor.R < min.R)
+          {
+            min = sourceColor;
+          }
+        }
+      }
+      return min;
+    }
+  }
+
+  class GradientFilter : MathMorph
+  {
+    public GradientFilter() 
+    {
+      MH = 3;
+      MW = 3;
+      mask = new int[3, 3] { { 0, 1, 0 },
+                             { 1, 1, 1 },
+                             { 0, 1, 0 } };
+    }
+    override public Bitmap processImage(Bitmap sourceImage, BackgroundWorker worker)
+    {
+      Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+
+      for (int i = 0; i < sourceImage.Width; ++i)
+      {
+        worker.ReportProgress((int)((float)i / resultImage.Width * 100));
+        if (worker.CancellationPending)
+          return null;
+
+        for (int j = 0; j < sourceImage.Height; ++j)
+        {
+          resultImage.SetPixel(i, j, calculateNewPixelColor(sourceImage, i, j));
+        }
+      }
+      return resultImage;
+    }
+    protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+    {
+      Color min = Color.FromArgb(255, 255, 255);
+      Color max = Color.FromArgb(0, 0, 0);
+      for (int j = -MH / 2; j <= MH / 2; ++j)
+      {
+        for (int i = -MW / 2; i <= MW / 2; ++i)
+        {
+          Color sourceColor = sourceImage.GetPixel(Clamp(x + i, 0, sourceImage.Width - 1), Clamp(y + j, 0, sourceImage.Height - 1));
+          if (mask[i + MW / 2, j + MH / 2] == 1 && sourceColor.R < min.R)
+          {
+            min = sourceColor;
+          }
+          if (mask[i + MW / 2, j + MH / 2] == 1 && sourceColor.R > max.R)
+          {
+            max = sourceColor;
+          }
+        }
+      }
+      return Color.FromArgb(Clamp(max.R - min.R, 0, 255), Clamp(max.G - min.G, 0, 255), Clamp(max.B - min.B, 0, 255));
+    }
+  }
+
+
+  class MedianFilter : MathMorph
+  {
+    public MedianFilter(){}
+    protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+    {
+      int size = 3;
+      int radius = 1;
+      int[] cR = new int[size * size];
+      int[] cG = new int[size * size];
+      int[] cB = new int[size * size];
+      int k = 0;
+
+      for (int i = -radius; i <= radius; i++)
+        for (int j = -radius; j <= radius; j++)
+        {
+          Color sourceColor = sourceImage.GetPixel(Clamp(x + i, 0, sourceImage.Width - 1), Clamp(y + j, 0, sourceImage.Height - 1));
+          cR[k] = sourceColor.R;
+          cG[k] = sourceColor.G;
+          cB[k] = sourceColor.B;
+          k++;
+        }
+
+      Array.Sort(cR);
+      Array.Sort(cG);
+      Array.Sort(cB);
+
+      int n_ = (int)(size * size / 2);
+
+      int cR_ = cR[n_];
+      int cG_ = cG[n_];
+      int cB_ = cB[n_];
+
+      Color resultColor = Color.FromArgb(cR_, cG_, cB_);
+      return resultColor;
     }
   }
 
